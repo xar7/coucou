@@ -1,0 +1,80 @@
+#+TITLE: XAR EMACS CONFIG
+#+AUTHOR: Mathieu 'xar' Nativel
+#+EMAIL: mathieu.nativel@lse.epita.fr
+
+* General
+** Misc
+  #+BEGIN_SRC emacs-lisp
+  (tool-bar-mode -1) ; hide tool bar
+  (menu-bar-mode -1) ; hide menu bar
+  (global-linum-mode) ; show line number
+  (column-number-mode) ; show column number in the modeline
+  (setq-default indent-tabs-mode nil) ; Disable tabs
+  (setq indent-tabs-mode nil)
+  (windmove-default-keybindings)
+  (toggle-scroll-bar -1)
+  (load-theme 'tango-dark)
+  #+END_SRC
+** Info
+   #+BEGIN_SRC emacs-lisp
+   (setq user-full-name "Mathieu 'xar' Nativel"
+         user-mailaddress "mathieu.nativel@lse.epita.fr")
+   #+END_SRC
+* C Config
+** General
+   #+BEGIN_SRC emacs-lisp
+   (setq c-basic-offset 4
+         c-default-style "bsd" ; from EPITA PIE
+         fill-column 80)
+   (setq whitespace-style '(face ; show:
+                            tabs tab-mark ; tab
+                            lines-tail ; lines too long
+                            trailing))
+   (global-whitespace-mode)
+   (setq make-backup-files nil) ; stop creating ~ file
+   (setq auto-save-default nil) ; stop creating #autosave#
+   #+END_SRC
+* Packages
+** Packages sources
+   #+BEGIN_SRC emacs-lisp
+   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                            ("melpa" . "https://melpa.org/packages/")))
+   #+END_SRC
+** use-package
+   #+BEGIN_SRC emacs-lisp
+   (package-initialize)
+   (unless (package-installed-p 'use-package)
+     (package-refresh-contents)
+     (package-install 'use-package))
+   (require 'use-package)
+   (setq use-package-verbose t)
+   (setq use-package-always-ensure t)
+   (use-package auto-compile
+      :config
+      (auto-compile-on-load-mode))
+   (setq load-prefer-newer t)
+   #+END_SRC
+** Load general packages
+   #+BEGIN_SRC emacs-lisp
+   (use-package magit)
+   (use-package treemacs)
+   (use-package org)
+   (use-package org-bullets)
+   (use-package rainbow-delimiters)
+   #+END_SRC
+* Specific package configuration
+** Org-mode
+   #+BEGIN_SRC emacs-lisp
+   (require 'org-bullets)
+   (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
+   #+END_SRC
+** Rainbow-delimiters
+   #+BEGIN_SRC emacs-lisp
+   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+   #+END_SRC
+
+* Keybindings
+  #+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c g") 'magit-status)
+  (global-set-key (kbd "C-x t") 'treemacs)
+  #+END_SRC
