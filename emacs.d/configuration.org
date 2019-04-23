@@ -3,17 +3,30 @@
 #+EMAIL: mathieu.nativel@lse.epita.fr
 
 * General
+** Backup
+   Stop creating random ~ or ## files everywhere.
+   The backup files are now stored in .saves.
+   #+BEGIN_SRC emacs-lisp
+   (setq
+      backup-by-copying t
+      backup-directory-alist
+      '(("." . "~/.saves/"))
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
+      version-control t)
+   #+END_SRC
 ** Misc
+   Disable all kinds of bar, and load the theme tango-dark theme.
   #+BEGIN_SRC emacs-lisp
-  (tool-bar-mode -1) ; hide tool bar
-  (menu-bar-mode -1) ; hide menu bar
-  (global-linum-mode) ; show line number
-  (column-number-mode) ; show column number in the modeline
-  (setq-default indent-tabs-mode nil) ; Disable tabs
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (global-linum-mode)
+  (column-number-mode)
+  (setq-default indent-tabs-mode nil)
   (setq indent-tabs-mode nil)
   (windmove-default-keybindings)
-  (toggle-scroll-bar -1)
-  (load-theme 'tango-dark)
+  (scroll-bar-mode -1)
   #+END_SRC
 ** Info
    #+BEGIN_SRC emacs-lisp
@@ -22,6 +35,7 @@
    #+END_SRC
 * C Config
 ** General
+   Basic C configuration fitting EPITA coding style.
    #+BEGIN_SRC emacs-lisp
    (setq c-basic-offset 4
          c-default-style "bsd" ; from EPITA PIE
@@ -31,8 +45,6 @@
                             lines-tail ; lines too long
                             trailing))
    (global-whitespace-mode)
-   (setq make-backup-files nil) ; stop creating ~ file
-   (setq auto-save-default nil) ; stop creating #autosave#
    #+END_SRC
 * Packages
 ** Packages sources
@@ -41,8 +53,11 @@
                             ("melpa" . "https://melpa.org/packages/")))
    #+END_SRC
 ** use-package
+   The package refresh contents line, refresh your contents each time you load emacs.
+   That way it can be quite annoying if you're not using emacs as a daemon and if you launch it multiple times through the day.
    #+BEGIN_SRC emacs-lisp
    (package-initialize)
+   (package-refresh-contents)
    (unless (package-installed-p 'use-package)
      (package-refresh-contents)
      (package-install 'use-package))
@@ -61,6 +76,10 @@
    (use-package org)
    (use-package org-bullets)
    (use-package rainbow-delimiters)
+   (use-package projectile)
+   (use-package helm)
+   (use-package go-mode)
+   (use-package atom-dark-theme)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -72,9 +91,12 @@
    #+BEGIN_SRC emacs-lisp
    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
    #+END_SRC
-
+** Helm
+   #+BEGIN_SRC emacs-lisp
+   (require 'helm-config)
+   #+END_SRC
 * Keybindings
   #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c g") 'magit-status)
-  (global-set-key (kbd "C-x t") 'treemacs)
+  (global-set-key (kbd "C-c t") 'treemacs)
   #+END_SRC
