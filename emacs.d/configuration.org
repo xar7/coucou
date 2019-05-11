@@ -17,7 +17,7 @@
       version-control t)
    #+END_SRC
 ** Misc
-   Disable all kinds of bar, and load the theme tango-dark theme.
+   Disable all kinds of bar.
   #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
   (menu-bar-mode -1)
@@ -33,7 +33,7 @@
    (setq user-full-name "Mathieu 'xar' Nativel"
          user-mailaddress "mathieu.nativel@lse.epita.fr")
    #+END_SRC
-* C Config
+* Prog config
 ** General
    Basic C configuration fitting EPITA coding style.
    #+BEGIN_SRC emacs-lisp
@@ -44,7 +44,7 @@
                             tabs tab-mark ; tab
                             lines-tail ; lines too long
                             trailing))
-   (global-whitespace-mode)
+   (add-hook 'prog-mode-hook (lambda() (whitespace-mode 1)))
    #+END_SRC
 * Packages
 ** Packages sources
@@ -57,7 +57,8 @@
    That way it can be quite annoying if you're not using emacs as a daemon and if you launch it multiple times through the day.
    #+BEGIN_SRC emacs-lisp
    (package-initialize)
-   (package-refresh-contents)
+   (require 'use-package-ensure)
+   (setq use-package-always-ensure t)
    (unless (package-installed-p 'use-package)
      (package-refresh-contents)
      (package-install 'use-package))
@@ -79,7 +80,8 @@
    (use-package projectile)
    (use-package helm)
    (use-package go-mode)
-   (use-package atom-dark-theme)
+   (use-package markdown-mode)
+   (use-package doom-themes)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -94,6 +96,14 @@
 ** Helm
    #+BEGIN_SRC emacs-lisp
    (require 'helm-config)
+   (define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
+   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+   (define-key helm-map (kbd "C-z") 'helm-select-action)
+
+   (global-set-key (kbd "M-x") 'helm-M-x)
+   (global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
+   (global-set-key (kbd "C-x C-f") 'helm-find-files)
+   (global-set-key (kbd "C-x b") 'helm-mini)
    #+END_SRC
 * Keybindings
   #+BEGIN_SRC emacs-lisp
