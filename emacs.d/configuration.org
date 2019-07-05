@@ -85,9 +85,21 @@
    #+END_SRC
 * Specific package configuration
 ** Org-mode
+   Org mode hook with org bullets:
    #+BEGIN_SRC emacs-lisp
    (require 'org-bullets)
    (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
+   #+END_SRC
+   Highlight code when converting to pdf with latex:
+   #+BEGIN_SRC emacs-lisp
+   (require 'ox-latex)
+   (add-to-list 'org-latex-packages-alist '("" "minted"))
+   (setq org-latex-listings 'minted)
+   (setq org-latex-pdf-process
+   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+   (setq org-src-fontify-natively t)
    #+END_SRC
 ** Rainbow-delimiters
    #+BEGIN_SRC emacs-lisp
