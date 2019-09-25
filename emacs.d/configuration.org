@@ -10,11 +10,14 @@
    (setq
       backup-by-copying t
       backup-directory-alist
-      '(("." . "~/.saves/"))
+      '(("." . "~/.emacs.d/backup"))
       delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
       version-control t)
+   (defvar autosave-dir (expand-file-name "~/.emacs.d/autosave/"))
+   (setq auto-save-list-file-prefix autosave-dir)
+   (setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
    #+END_SRC
 ** Misc
    Disable all kinds of bar.
@@ -57,12 +60,12 @@
    That way it can be quite annoying if you're not using emacs as a daemon and if you launch it multiple times through the day.
    #+BEGIN_SRC emacs-lisp
    (package-initialize)
-   (require 'use-package-ensure)
-   (setq use-package-always-ensure t)
    (unless (package-installed-p 'use-package)
      (package-refresh-contents)
      (package-install 'use-package))
    (require 'use-package)
+   (require 'use-package-ensure)
+   (setq use-package-always-ensure t)
    (setq use-package-verbose t)
    (setq use-package-always-ensure t)
    (use-package auto-compile
@@ -120,5 +123,7 @@
 * Keybindings
   #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c g") 'magit-status)
+  (global-set-key (kbd "C-x C-g") 'projectile-find-file)
   (global-set-key (kbd "C-c t") 'treemacs)
+  (global-set-key (kbd "M-s M-s") 'whitespace-mode)
   #+END_SRC
