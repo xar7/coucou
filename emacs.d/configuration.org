@@ -27,6 +27,7 @@
   (setq indent-tabs-mode nil)
   (windmove-default-keybindings)
   (scroll-bar-mode -1)
+  (global-hl-line-mode)
   #+END_SRC
 ** Info
    #+BEGIN_SRC emacs-lisp
@@ -57,12 +58,12 @@
    That way it can be quite annoying if you're not using emacs as a daemon and if you launch it multiple times through the day.
    #+BEGIN_SRC emacs-lisp
    (package-initialize)
-   (require 'use-package-ensure)
-   (setq use-package-always-ensure t)
    (unless (package-installed-p 'use-package)
      (package-refresh-contents)
      (package-install 'use-package))
    (require 'use-package)
+   (require 'use-package-ensure)
+   (setq use-package-always-ensure t)
    (setq use-package-verbose t)
    (setq use-package-always-ensure t)
    (use-package auto-compile
@@ -121,4 +122,8 @@
   #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c g") 'magit-status)
   (global-set-key (kbd "C-c t") 'treemacs)
+  #+END_SRC
+* Theme
+  #+BEGIN_SRC emacs-lisp
+  (load-theme 'doom-vibrant t)
   #+END_SRC
