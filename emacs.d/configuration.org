@@ -15,9 +15,8 @@
       kept-new-versions 6
       kept-old-versions 2
       version-control t)
-   (defvar autosave-dir (expand-file-name "~/.emacs.d/autosave/"))
-   (setq auto-save-list-file-prefix autosave-dir)
-   (setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
+   (setq auto-save-file-name-transforms
+      `((".*" "~/.emacs.d/autosaves" t)))
    #+END_SRC
 ** Misc
    Disable all kinds of bar.
@@ -46,7 +45,6 @@
          fill-column 80)
    (setq whitespace-style '(face ; show:
                             tabs tab-mark ; tab
-                            lines-tail ; lines too long
                             trailing))
    (add-hook 'prog-mode-hook (lambda() (whitespace-mode 1)))
    #+END_SRC
@@ -105,10 +103,18 @@
      "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
    (setq org-src-fontify-natively t)
    #+END_SRC
+** Projectile
+   #+BEGIN_SRC emacs-lisp
+   (require 'projectile)
+   (define-key projectile-mode-map (kbd "C-c p") projectile-command-map)
+   (projectile-mode +1)
+   #+END_SRC
+
 ** Rainbow-delimiters
    #+BEGIN_SRC emacs-lisp
    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
    #+END_SRC
+* Keybindings
 ** Helm
    #+BEGIN_SRC emacs-lisp
    (require 'helm-config)
@@ -121,13 +127,12 @@
    (global-set-key (kbd "C-x C-f") 'helm-find-files)
    (global-set-key (kbd "C-x b") 'helm-mini)
    #+END_SRC
-* Keybindings
-  #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c g") 'magit-status)
-  (global-set-key (kbd "C-x C-g") 'projectile-find-file)
-  (global-set-key (kbd "C-c t") 'treemacs)
-  (global-set-key (kbd "M-s M-s") 'whitespace-mode)
-  #+END_SRC
+** Misc
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "C-c g") 'magit-status)
+   (global-set-key (kbd "C-c t") 'treemacs)
+   (global-set-key (kbd "M-s M-s") 'whitespace-mode)
+   #+END_SRC
 * Theme
   #+BEGIN_SRC emacs-lisp
   (load-theme 'doom-vibrant t)
