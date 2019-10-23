@@ -91,6 +91,7 @@
    #+BEGIN_SRC emacs-lisp
    (require 'org-bullets)
    (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
+   (add-hook 'org-mode-hook (lambda() (visual-line-mode 1)))
    #+END_SRC
    Highlight code when converting to pdf with latex:
    #+BEGIN_SRC emacs-lisp
