@@ -81,9 +81,12 @@
    (use-package rainbow-delimiters)
    (use-package projectile)
    (use-package helm)
+   (use-package helm-rg)
+   (use-package helm-projectile)
    (use-package go-mode)
    (use-package markdown-mode)
    (use-package doom-themes)
+   (use-package ox-reveal)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -110,7 +113,11 @@
    (define-key projectile-mode-map (kbd "C-c p") projectile-command-map)
    (projectile-mode +1)
    #+END_SRC
-
+** Helm
+   #+BEGIN_SRC emacs-lisp
+   (require 'helm-projectile)
+   (helm-projectile-on)
+   #+END_SRC
 ** Rainbow-delimiters
    #+BEGIN_SRC emacs-lisp
    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
@@ -136,5 +143,5 @@
    #+END_SRC
 * Theme
   #+BEGIN_SRC emacs-lisp
-  (load-theme 'doom-vibrant t)
+  (load-theme 'doom-dracula t)
   #+END_SRC
