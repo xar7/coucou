@@ -87,6 +87,7 @@
    (use-package markdown-mode)
    (use-package doom-themes)
    (use-package ox-reveal)
+   (use-package realgud)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
