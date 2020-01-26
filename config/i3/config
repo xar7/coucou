@@ -179,7 +179,7 @@ bar {
 }
 
 
-for_window [class="^.*"] border pixel 3
+for_window [class="^.*"] border pixel 1
 gaps outer 0
 gaps inner 10
 
@@ -187,6 +187,8 @@ gaps inner 10
 smart_borders on
 smart_gaps on
 
-# arandr config for dual screen
-exec --no-startup-id bash ~/.screenlayout/arandr_boot.sh
+# Arandr config when opening i3
+# exec --no-startup-id bash ~/.screenlayout/arandr_boot.sh
+
+# Wallpaper
 exec --no-startup-id feh --bg-scale ~/Pictures/wallpaper.jpg

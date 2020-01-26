@@ -1,15 +1,11 @@
 # The coucou repository
 
-## Description
-   This repository contains my dot-files.  
-   Here's a list of all actuals config:
+   This repository contains my configurations files.  
+   Here's a list of current configs available here:
    - emacs.d
-   - bashrc
+   - kitty
+   - i3
    
-   More config file will probably come someday. I did not write a install script as I don't have enough files for it to be relevant.  
-   Actually I think the only interesting thing for you to look at is my emacs config.
+   I also have a Makefile which should be able to install these configurations properly. Note that I used the verb *should* as this Makefile is probably completely broken.
 
-## Emacs
-   My emacs config is written in a org-mode file, which makes it easily readable ! (`emacs.d/configuration.org`)  
-   The only line in init.el tells emacs to load the config from the org file at launch.  
-   If I haven't done anything wrong (hmmm) you can just copy the directory to `$HOME/.emacs.d` and run emacs. Everything should work fine.
+   
