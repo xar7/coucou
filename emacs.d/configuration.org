@@ -40,13 +40,18 @@
 ** General
    Basic C configuration fitting EPITA coding style.
    #+BEGIN_SRC emacs-lisp
-   (setq c-basic-offset 4
+   (setq c-basic-offset 8
          c-default-style "bsd" ; from EPITA PIE
          fill-column 80)
    (setq whitespace-style '(face ; show:
                             tabs tab-mark ; tab
                             trailing))
    (add-hook 'prog-mode-hook (lambda() (whitespace-mode 1)))
+   #+END_SRC
+** Common Lisp
+   #+BEGIN_SRC emacs-lisp
+   (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+   (setq inferior-lisp-program "sbcl")
    #+END_SRC
 * Packages
 ** Packages sources
@@ -144,5 +149,5 @@
    #+END_SRC
 * Theme
   #+BEGIN_SRC emacs-lisp
-  (load-theme 'doom-dracula t)
+  (load-theme 'doom-vibrant t)
   #+END_SRC
