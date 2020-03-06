@@ -18,7 +18,7 @@ emacsAsDaemon:
 
 .PHONY: i3
 i3:
-	ln -f $(PWD)/config/i3/ $(HOME)/.config/i3
+	ln -f $(PWD)/config/i3/config $(HOME)/.config/i3/config
 
 .PHONY: kitty
 kitty:

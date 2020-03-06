@@ -36,6 +36,14 @@
    (setq user-full-name "Mathieu 'xar' Nativel"
          user-mailaddress "mathieu.nativel@lse.epita.fr")
    #+END_SRC
+** Custom function
+   Kill all buffers but the current one.
+   #+BEGIN_SRC emacs-lisp
+   (defun kill-other-buffers()
+        "Kill all other buffers."
+        (interactive)
+        (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+   #+END_SRC
 * Prog config
 ** General
    Basic C configuration fitting EPITA coding style.
@@ -44,11 +52,10 @@
          c-default-style "bsd" ; from EPITA PIE
          fill-column 80)
    (setq whitespace-style '(face ; show:
-                            tabs tab-mark ; tab
                             trailing))
    (add-hook 'prog-mode-hook (lambda() (whitespace-mode 1)))
    #+END_SRC
-** Common Lisp
+** Common lisp
    #+BEGIN_SRC emacs-lisp
    (load (expand-file-name "~/.quicklisp/slime-helper.el"))
    (setq inferior-lisp-program "sbcl")
@@ -149,5 +156,7 @@
    #+END_SRC
 * Theme
   #+BEGIN_SRC emacs-lisp
-  (load-theme 'doom-vibrant t)
+  (load-theme 'doom-one t)
+  (add-to-list 'default-frame-alist
+               '(font . "Fira Code Medium-12"))
   #+END_SRC

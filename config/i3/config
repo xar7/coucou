@@ -195,7 +195,7 @@ smart_borders on
 smart_gaps on
 
 # Arandr config when opening i3
-# exec --no-startup-id bash ~/.screenlayout/arandr_boot.sh
+exec --no-startup-id bash ~/.screenlayout/arandr_boot.sh
 
 # Things to execute at startups
 exec --no-startup-id nm-applet # NetworkManager tray GUI.
