@@ -1,0 +1,12 @@
+emacs.d/eshell
+emacs.d/games
+emacs.d/elpa
+emacs.d/auto-save-list
+emacs.d/backup
+emacs.d/transient
+emacs.d/init.el
+emacs.d/configuration.el
+emacs.d/projectile*
+emacs.d/.cache
+emacs.d/recentf
+emacs.d/#*
