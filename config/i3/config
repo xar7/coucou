@@ -199,5 +199,6 @@ exec --no-startup-id bash ~/.screenlayout/arandr_boot.sh
 
 # Things to execute at startups
 exec --no-startup-id nm-applet # NetworkManager tray GUI.
+exec --no-startup-id blueman-applet # Bluetooth tray GUI
 exec --no-startup-id compton # Compositor
 exec --no-startup-id feh --bg-scale ~/Pictures/wallpaper.jpg # Wallpaper
