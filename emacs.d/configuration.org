@@ -53,12 +53,21 @@
          fill-column 80)
    (setq whitespace-style '(face ; show:
                             trailing))
-   (add-hook 'prog-mode-hook (lambda() (whitespace-mode 1)))
+   (add-hook 'prog-mode-hook (lambda () (whitespace-mode 1)))
+;;   (add-hook 'prog-mode-hook (lambda () (read-only-mode 1)))
    #+END_SRC
 ** Common lisp
    #+BEGIN_SRC emacs-lisp
-   (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-   (setq inferior-lisp-program "sbcl")
+   ;(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+   ;(setq inferior-lisp-program "sbcl")
+   #+END_SRC
+** Compilation buffer
+   #+BEGIN_SRC emacs-lisp
+   (require 'ansi-color)
+   (defun colorize-compilation-buffer ()
+   (let ((inhibit-read-only t))
+   (ansi-color-apply-on-region (point-min) (point-max))))
+   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
    #+END_SRC
 * Packages
 ** Packages sources
@@ -101,6 +110,10 @@
    (use-package ox-reveal)
 ;; (use-package real-gud)
    (use-package f)
+   (use-package company)
+   (use-package company-ctags)
+   (use-package emojify
+   :hook (after-init . global-emojify-mode)) ;; yolo it's 2021
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -136,6 +149,11 @@
    #+BEGIN_SRC emacs-lisp
    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
    #+END_SRC
+** Company
+   #+BEGIN_SRC emacs-lisp
+   (require 'company)
+   (add-hook 'prog-mode-hook (lambda () (setq-local company-backends '((company-ctags)))))
+   #+END_SRC
 * Keybindings
 ** Helm
    #+BEGIN_SRC emacs-lisp
@@ -154,10 +172,11 @@
    (global-set-key (kbd "C-c g") 'magit-status)
    (global-set-key (kbd "C-c t") 'treemacs)
    (global-set-key (kbd "M-s M-s") 'whitespace-mode)
+   (global-set-key (kbd "C-c p") 'company-complete)
    #+END_SRC
 * Theme
   #+BEGIN_SRC emacs-lisp
-  (load-theme 'doom-one t)
+  (load-theme 'doom-nord t)
   (add-to-list 'default-frame-alist
-               '(font . "Fira Code Medium-12"))
+               '(font . "Fira Code Medium-11"))
   #+END_SRC
