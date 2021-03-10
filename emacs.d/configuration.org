@@ -112,8 +112,7 @@
    (use-package f)
    (use-package company)
    (use-package company-ctags)
-   (use-package emojify
-   :hook (after-init . global-emojify-mode)) ;; yolo it's 2021
+   (use-package emojify)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
