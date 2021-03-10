@@ -34,7 +34,7 @@
 ** Info
    #+BEGIN_SRC emacs-lisp
    (setq user-full-name "Mathieu 'xar' Nativel"
-         user-mailaddress "mathieu.nativel@lse.epita.fr")
+         user-mailaddress "mn@xar.re")
    #+END_SRC
 ** Custom function
    Kill all buffers but the current one.
