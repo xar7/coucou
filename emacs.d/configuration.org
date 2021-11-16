@@ -1,6 +1,6 @@
 #+TITLE: XAR EMACS CONFIG
 #+AUTHOR: Mathieu 'xar' Nativel
-#+EMAIL: mathieu.nativel@lse.epita.fr
+#+EMAIL: mn@xar.re
 
 * General
 ** Backup
@@ -93,7 +93,7 @@
       (auto-compile-on-load-mode))
    (setq load-prefer-newer t)
    #+END_SRC
-** Load general packages
+** package lists
    #+BEGIN_SRC emacs-lisp
    (use-package magit)
    (use-package treemacs)
@@ -102,6 +102,7 @@
    (use-package rainbow-delimiters)
    (use-package projectile)
    (use-package helm)
+   (use-package helm-rtags)
    (use-package helm-rg)
    (use-package helm-projectile)
    (use-package go-mode)
@@ -113,15 +114,44 @@
    (use-package company)
    (use-package company-ctags)
    (use-package emojify)
+   (use-package clang-format)
+   (use-package rtags
+     :ensure t
+     :config (setq rtags-path "~/.emacs.d/elpa/rtags-20210313.1541/rtags-2.38/bin"
+                   rtags-use-helm t
+                   rtags-completion-enabled t
+                   rtags-display-result-backend 'helm
+                   rtags-autostart-diagnostics t))
+   (use-package company-rtags)
+   (use-package irony-mode)
+   (use-package company-irony)
+   (use-package company-irony-c-headers)
+   (use-package flycheck)
+   (use-package flycheck-irony)
+   (use-package cmake-ide)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
+   Global keybindings and org mode configuration
+   #+BEGIN_SRC emacs-lisp
+   (require 'org)
+   (define-key org-mode-map (kbd "C-c a") 'org-agenda)
+   (define-key org-mode-map (kbd "C-c l") 'org-store-link)
+   (setq org-log-done t)  ; log data/time when todo is set to done
+   #+END_SRC
    Org mode hook with org bullets:
    #+BEGIN_SRC emacs-lisp
    (require 'org-bullets)
    (add-hook 'org-mode-hook (lambda() (org-bullets-mode 1)))
    (add-hook 'org-mode-hook (lambda() (visual-line-mode 1)))
    #+END_SRC
+   Make windmove work also with org mode. [[https://orgmode.org/manual/Conflicts.html][org mode doc]]
+   #+BEGIN_SRC emacs-lisp   
+   (add-hook 'org-shiftup-final-hook 'windmove-up)
+   (add-hook 'org-shiftleft-final-hook 'windmove-left)
+   (add-hook 'org-shiftdown-final-hook 'windmove-down)
+   (add-hook 'org-shiftright-final-hook 'windmove-right)
+   #+END_SRC emacs-lisp
    Highlight code when converting to pdf with latex:
    #+BEGIN_SRC emacs-lisp
    (require 'ox-latex)
@@ -148,11 +178,71 @@
    #+BEGIN_SRC emacs-lisp
    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
    #+END_SRC
-** Company
+** Clang-format
    #+BEGIN_SRC emacs-lisp
-   (require 'company)
-   (add-hook 'prog-mode-hook (lambda () (setq-local company-backends '((company-ctags)))))
-   #+END_SRC
+   (require 'clang-format)
+   (setq clang-format-style "file")
+   (defun clang-format-buffer-smart () ;; thx eklitzke
+     "Reformat the buffer only if project root contains .clang-format"
+     (when (f-exists? (expand-file-name ".clang-format" (projectile-project-root)))
+       (clang-format-buffer)))
+   (add-hook 'c-mode-common-hook
+     (function (lambda ()
+     (add-hook 'before-save-hook 'clang-format-buffer-smart))))
+   #+END_SRC emacs-lisp
+** Fancy ide stuffs
+   #+BEGIN_SRC emacs-lisp
+   (require 'rtags)
+   (require 'company-rtags)
+   (eval-after-load 'company
+       '(add-to-list
+         'company-backends 'company-rtags))
+   (rtags-enable-standard-keybindings)
+
+   (add-hook 'c++-mode-hook 'irony-mode)
+   (add-hook 'c-mode-hook 'irony-mode)
+
+   (defun my-irony-mode-hook ()
+     (define-key irony-mode-map [remap completion-at-point]
+       'irony-completion-at-point-async)
+     (define-key irony-mode-map [remap complete-symbol]
+       'irony-completion-at-point-async))
+
+   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+   (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+   (setq company-backends (delete 'company-semantic company-backends))
+   (eval-after-load 'company
+     '(add-to-list
+       'company-backends 'company-irony))
+
+   (setq company-idle-delay 0)
+   (define-key c-mode-map [(tab)] 'company-complete)
+   (define-key c++-mode-map [(tab)] 'company-complete)
+
+   (eval-after-load 'company
+     '(add-to-list
+       'company-backends 'company-irony))
+   (require 'company-irony-c-headers)
+   (eval-after-load 'company
+     '(add-to-list
+       'company-backends '(company-irony-c-headers company-irony)))
+
+   (add-hook 'c++-mode-hook 'flycheck-mode)
+   (add-hook 'c-mode-hook 'flycheck-mode)
+
+   (require 'flycheck-rtags)
+
+   (defun my-flycheck-rtags-setup ()
+     (flycheck-select-checker 'rtags)
+     (setq-local flycheck-highlighting-mode nil)
+     (setq-local flycheck-check-syntax-automically nil))
+   (add-hook 'c-mode-common-hook #'my-flycheck-rtags-setup)
+   (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+
+   (cmake-ide-setup)
+   #+END_SRC emacs-lisp
 * Keybindings
 ** Helm
    #+BEGIN_SRC emacs-lisp
@@ -166,6 +256,12 @@
    (global-set-key (kbd "C-x C-f") 'helm-find-files)
    (global-set-key (kbd "C-x b") 'helm-mini)
    #+END_SRC
+** Code navigation
+   #+BEGIN_SRC emacs-lisp
+   (require 'rtags)
+   (define-key c-mode-map  (kbd "C-x g") 'rtags-find-symbol-at-point)
+   (define-key c++-mode-map (kbd "C-x g") 'rtags-find-symbol-at-point)
+   #+END_SRC emacs-lisp
 ** Misc
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "C-c g") 'magit-status)
@@ -175,7 +271,7 @@
    #+END_SRC
 * Theme
   #+BEGIN_SRC emacs-lisp
-  (load-theme 'doom-nord t)
+  (load-theme 'doom-one t)
   (add-to-list 'default-frame-alist
                '(font . "Fira Code Medium-11"))
   #+END_SRC
