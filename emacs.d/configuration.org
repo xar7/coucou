@@ -123,11 +123,12 @@
                    rtags-display-result-backend 'helm
                    rtags-autostart-diagnostics t))
    (use-package company-rtags)
-   (use-package irony-mode)
+   (use-package irony)
    (use-package company-irony)
    (use-package company-irony-c-headers)
    (use-package flycheck)
    (use-package flycheck-irony)
+   (use-package flycheck-rtags)
    (use-package cmake-ide)
    #+END_SRC
 * Specific package configuration
@@ -137,7 +138,7 @@
    (require 'org)
    (define-key org-mode-map (kbd "C-c a") 'org-agenda)
    (define-key org-mode-map (kbd "C-c l") 'org-store-link)
-   (setq org-log-done t)  ; log data/time when todo is set to done
+   (setq org-log-done t)  ;; log data/time when todo is set to done
    #+END_SRC
    Org mode hook with org bullets:
    #+BEGIN_SRC emacs-lisp
@@ -151,7 +152,7 @@
    (add-hook 'org-shiftleft-final-hook 'windmove-left)
    (add-hook 'org-shiftdown-final-hook 'windmove-down)
    (add-hook 'org-shiftright-final-hook 'windmove-right)
-   #+END_SRC emacs-lisp
+   #+END_SRC
    Highlight code when converting to pdf with latex:
    #+BEGIN_SRC emacs-lisp
    (require 'ox-latex)
@@ -186,10 +187,13 @@
      "Reformat the buffer only if project root contains .clang-format"
      (when (f-exists? (expand-file-name ".clang-format" (projectile-project-root)))
        (clang-format-buffer)))
-   (add-hook 'c-mode-common-hook
+   (add-hook 'c-mode-hook
      (function (lambda ()
      (add-hook 'before-save-hook 'clang-format-buffer-smart))))
-   #+END_SRC emacs-lisp
+   (add-hook 'c++-mode-hook
+     (function (lambda ()
+     (add-hook 'before-save-hook 'clang-format-buffer-smart))))
+   #+END_SRC
 ** Fancy ide stuffs
    #+BEGIN_SRC emacs-lisp
    (require 'rtags)
@@ -242,7 +246,7 @@
       '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
    (cmake-ide-setup)
-   #+END_SRC emacs-lisp
+   #+END_SRC
 * Keybindings
 ** Helm
    #+BEGIN_SRC emacs-lisp
@@ -261,7 +265,7 @@
    (require 'rtags)
    (define-key c-mode-map  (kbd "C-x g") 'rtags-find-symbol-at-point)
    (define-key c++-mode-map (kbd "C-x g") 'rtags-find-symbol-at-point)
-   #+END_SRC emacs-lisp
+   #+END_SRC
 ** Misc
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "C-c g") 'magit-status)
