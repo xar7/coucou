@@ -221,8 +221,8 @@
        'company-backends 'company-irony))
 
    (setq company-idle-delay 0)
-   (define-key c-mode-map [(tab)] 'company-complete)
-   (define-key c++-mode-map [(tab)] 'company-complete)
+   (define-key c-mode-map [C-(tab)] 'company-complete)
+   (define-key c++-mode-map [C-(tab)] 'company-complete)
 
    (eval-after-load 'company
      '(add-to-list
