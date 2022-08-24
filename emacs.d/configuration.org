@@ -48,8 +48,8 @@
 ** General
    Basic C configuration fitting EPITA coding style.
    #+BEGIN_SRC emacs-lisp
-   (setq c-basic-offset 8
-         c-default-style "bsd" ; from EPITA PIE
+   (setq c-basic-offset 4
+         c-default-style "bsd"
          fill-column 80)
    (setq whitespace-style '(face ; show:
                             trailing))
