@@ -245,7 +245,6 @@
    (eval-after-load 'flycheck
       '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
-   (cmake-ide-setup)
    #+END_SRC
 * Keybindings
 ** Helm
