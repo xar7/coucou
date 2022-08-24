@@ -109,11 +109,11 @@
    (use-package markdown-mode)
    (use-package doom-themes)
    (use-package ox-reveal)
-;; (use-package real-gud)
+;;   (use-package real-gud)
    (use-package f)
    (use-package company)
    (use-package company-ctags)
-   (use-package emojify)
+;;   (use-package emojify)
    (use-package clang-format)
    (use-package rtags
      :ensure t
@@ -129,7 +129,7 @@
    (use-package flycheck)
    (use-package flycheck-irony)
    (use-package flycheck-rtags)
-   (use-package cmake-ide)
+   (use-package visual-regexp)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
