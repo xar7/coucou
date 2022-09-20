@@ -185,7 +185,8 @@
    (setq clang-format-style "file")
    (defun clang-format-buffer-smart () ;; thx eklitzke
      "Reformat the buffer only if project root contains .clang-format"
-     (when (f-exists? (expand-file-name ".clang-format" (projectile-project-root)))
+     (when (and (f-exists? (expand-file-name ".clang-format" (projectile-project-root)))
+                (or (string-equal major-mode "c-mode") (string-equal major-mode "c++-mode")))
        (clang-format-buffer)))
    (add-hook 'c-mode-hook
      (function (lambda ()
