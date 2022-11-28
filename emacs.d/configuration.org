@@ -95,41 +95,39 @@
    #+END_SRC
 ** package lists
    #+BEGIN_SRC emacs-lisp
-   (use-package magit)
-   (use-package treemacs)
-   (use-package org)
-   (use-package org-bullets)
-   (use-package rainbow-delimiters)
-   (use-package projectile)
-   (use-package helm)
-   (use-package helm-rtags)
-   (use-package helm-rg)
-   (use-package helm-projectile)
-   (use-package go-mode)
-   (use-package markdown-mode)
-   (use-package doom-themes)
-   (use-package ox-reveal)
-;;   (use-package real-gud)
-   (use-package f)
-   (use-package company)
-   (use-package company-ctags)
-;;   (use-package emojify)
-   (use-package clang-format)
-   (use-package rtags
-     :ensure t
-     :config (setq rtags-path "~/.emacs.d/elpa/rtags-20210313.1541/rtags-2.38/bin"
-                   rtags-use-helm t
-                   rtags-completion-enabled t
-                   rtags-display-result-backend 'helm
-                   rtags-autostart-diagnostics t))
-   (use-package company-rtags)
-   (use-package irony)
-   (use-package company-irony)
-   (use-package company-irony-c-headers)
-   (use-package flycheck)
-   (use-package flycheck-irony)
-   (use-package flycheck-rtags)
-   (use-package visual-regexp)
+        (use-package magit)
+        (use-package treemacs)
+        (use-package org)
+        (use-package org-bullets)
+        (use-package rainbow-delimiters)
+        (use-package projectile)
+        (use-package helm)
+        (use-package helm-rg)
+        (use-package helm-projectile)
+        (use-package go-mode)
+        (use-package markdown-mode)
+        (use-package doom-themes)
+        (use-package ox-reveal)
+     ;;   (use-package real-gud)
+        (use-package f)
+        (use-package company)
+     ;;   (use-package emojify)
+        (use-package clang-format)
+        (use-package flycheck)
+        (use-package csharp-mode)
+        (use-package visual-regexp)
+        (use-package lsp-mode
+          :init
+          ;; set the prefix for lsp-command-keymap
+          (setq lsp-keymap-prefix "C-c l")
+          (setq lsp-clients-clangd-executable (executable-find "clangd"))
+          (setq lsp-pyls-server-command "/home/xar/.local/bin/pylsp")
+          :hook (c++-mode . lsp)
+          :hook (csharp-mode . lsp)
+          :commands (lsp lsp-deferred))
+        (use-package lsp-ui :commands lsp-ui-mode)
+        (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+        (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -195,58 +193,13 @@
      (function (lambda ()
      (add-hook 'before-save-hook 'clang-format-buffer-smart))))
    #+END_SRC
-** Fancy ide stuffs
-   #+BEGIN_SRC emacs-lisp
-   (require 'rtags)
-   (require 'company-rtags)
-   (eval-after-load 'company
-       '(add-to-list
-         'company-backends 'company-rtags))
-   (rtags-enable-standard-keybindings)
+** Csharp things
+   Line endingx
+#+BEGIN_SRC emacs-lisp
+(require 'csharp-mode)
+(add-hook 'csharp-mode (setq buffer-file-coding-system 'dos))
+#+END_SRC
 
-   (add-hook 'c++-mode-hook 'irony-mode)
-   (add-hook 'c-mode-hook 'irony-mode)
-
-   (defun my-irony-mode-hook ()
-     (define-key irony-mode-map [remap completion-at-point]
-       'irony-completion-at-point-async)
-     (define-key irony-mode-map [remap complete-symbol]
-       'irony-completion-at-point-async))
-
-   (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-   (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-   (setq company-backends (delete 'company-semantic company-backends))
-   (eval-after-load 'company
-     '(add-to-list
-       'company-backends 'company-irony))
-
-   (setq company-idle-delay 0)
-   (define-key c-mode-map [C-(tab)] 'company-complete)
-   (define-key c++-mode-map [C-(tab)] 'company-complete)
-
-   (eval-after-load 'company
-     '(add-to-list
-       'company-backends 'company-irony))
-   (require 'company-irony-c-headers)
-   (eval-after-load 'company
-     '(add-to-list
-       'company-backends '(company-irony-c-headers company-irony)))
-
-   (add-hook 'c++-mode-hook 'flycheck-mode)
-   (add-hook 'c-mode-hook 'flycheck-mode)
-
-   (require 'flycheck-rtags)
-
-   (defun my-flycheck-rtags-setup ()
-     (flycheck-select-checker 'rtags)
-     (setq-local flycheck-highlighting-mode nil)
-     (setq-local flycheck-check-syntax-automically nil))
-   (add-hook 'c-mode-common-hook #'my-flycheck-rtags-setup)
-   (eval-after-load 'flycheck
-      '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-
-   #+END_SRC
 * Keybindings
 ** Helm
    #+BEGIN_SRC emacs-lisp
@@ -259,12 +212,6 @@
    (global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
    (global-set-key (kbd "C-x C-f") 'helm-find-files)
    (global-set-key (kbd "C-x b") 'helm-mini)
-   #+END_SRC
-** Code navigation
-   #+BEGIN_SRC emacs-lisp
-   (require 'rtags)
-   (define-key c-mode-map  (kbd "C-x g") 'rtags-find-symbol-at-point)
-   (define-key c++-mode-map (kbd "C-x g") 'rtags-find-symbol-at-point)
    #+END_SRC
 ** Misc
    #+BEGIN_SRC emacs-lisp
