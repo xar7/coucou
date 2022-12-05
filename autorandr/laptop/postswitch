@@ -1,0 +1,2 @@
+#!/bin/sh
+i3-msg '[workspace="^"]' move workspace to output eDP-1
