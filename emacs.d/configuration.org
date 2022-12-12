@@ -1,5 +1,5 @@
-#+TITLE: XAR EMACS CONFIG
 #+AUTHOR: Mathieu 'xar' Nativel
+#+TITLE: XAR EMACS CONFIG
 #+EMAIL: mn@xar.re
 
 * General
@@ -48,7 +48,7 @@
 ** General
    Basic C configuration fitting EPITA coding style.
    #+BEGIN_SRC emacs-lisp
-   (setq c-basic-offset 4
+   (setq c-basic-offset 3
          c-default-style "bsd"
          fill-column 80)
    (setq whitespace-style '(face ; show:
@@ -95,39 +95,44 @@
    #+END_SRC
 ** package lists
    #+BEGIN_SRC emacs-lisp
-        (use-package magit)
-        (use-package treemacs)
-        (use-package org)
-        (use-package org-bullets)
-        (use-package rainbow-delimiters)
-        (use-package projectile)
-        (use-package helm)
-        (use-package helm-rg)
-        (use-package helm-projectile)
-        (use-package go-mode)
-        (use-package markdown-mode)
-        (use-package doom-themes)
-        (use-package ox-reveal)
+     (use-package magit)
+     (use-package treemacs)
+     (use-package org)
+     (use-package org-bullets)
+     (use-package rainbow-delimiters)
+     (use-package projectile)
+     (use-package helm)
+     (use-package helm-rg)
+     (use-package helm-projectile)
+     (use-package go-mode)
+     (use-package markdown-mode)
+     (use-package doom-themes)
+     (use-package ox-reveal)
      ;;   (use-package real-gud)
-        (use-package f)
-        (use-package company)
+     (use-package f)
+     (use-package company)
      ;;   (use-package emojify)
-        (use-package clang-format)
-        (use-package flycheck)
-        (use-package csharp-mode)
-        (use-package visual-regexp)
-        (use-package lsp-mode
-          :init
-          ;; set the prefix for lsp-command-keymap
-          (setq lsp-keymap-prefix "C-c l")
-          (setq lsp-clients-clangd-executable (executable-find "clangd"))
-          (setq lsp-pyls-server-command "/home/xar/.local/bin/pylsp")
-          :hook (c++-mode . lsp)
-          :hook (csharp-mode . lsp)
-          :commands (lsp lsp-deferred))
-        (use-package lsp-ui :commands lsp-ui-mode)
-        (use-package helm-lsp :commands helm-lsp-workspace-symbol)
-        (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+     (use-package clang-format)
+     (use-package flycheck)
+     (use-package csharp-mode)
+     (use-package visual-regexp)
+     (use-package lsp-mode
+       :init
+       ;; set the prefix for lsp-command-keymap
+       (setq lsp-keymap-prefix "C-c l")
+       (setq lsp-clients-clangd-executable (executable-find "clangd"))
+       (setq lsp-pyls-server-command "/home/xar/.local/bin/pylsp")
+       :hook (c++-mode . lsp)
+       :hook (csharp-mode . lsp)
+       :commands (lsp lsp-deferred))
+     (use-package lsp-ui :commands lsp-ui-mode)
+     (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+     (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+     (use-package cmake-mode)
+     (use-package protobuf-mode)
+     (use-package tree-sitter)
+     (use-package tree-sitter-langs)
+     (use-package py-autopep8)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -170,12 +175,13 @@
    #+END_SRC
 ** Helm
    #+BEGIN_SRC emacs-lisp
-   (require 'helm-projectile)
-   (helm-projectile-on)
+     (require 'helm-projectile)
+     (helm-projectile-on)
+     (setq helm-rg-default-directory 'git-root)
    #+END_SRC
 ** Rainbow-delimiters
    #+BEGIN_SRC emacs-lisp
-   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+     (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
    #+END_SRC
 ** Clang-format
    #+BEGIN_SRC emacs-lisp
@@ -194,12 +200,24 @@
      (add-hook 'before-save-hook 'clang-format-buffer-smart))))
    #+END_SRC
 ** Csharp things
-   Line endingx
-#+BEGIN_SRC emacs-lisp
-(require 'csharp-mode)
-(add-hook 'csharp-mode (setq buffer-file-coding-system 'dos))
-#+END_SRC
-
+   Line ending
+   #+BEGIN_SRC emacs-lisp
+     (require 'csharp-mode)
+     (add-hook 'csharp-mode (setq buffer-file-coding-system 'dos))
+   #+END_SRC
+** Python things
+   Autopep8 on save (similar to auto clang-format)
+   #+BEGIN_SRC emacs-lisp
+     (require 'py-autopep8)
+     (add-hook 'python-mode-hook 'py-autopep8-mode)
+     (setq py-autopep8-options '("--max-line-length=100" "--aggressive"))
+   #+END_SRC
+** Tree-sitter
+   Tree-sitter because I ran into font-lock-mode infinite loop when opening a docstring in python
+   #+BEGIN_SRC emacs-lisp
+     (global-tree-sitter-mode)
+     (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+   #+END_SRC
 * Keybindings
 ** Helm
    #+BEGIN_SRC emacs-lisp

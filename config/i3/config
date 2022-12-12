@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+font pango:Fira Code Mono 9
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -183,12 +183,15 @@ bindsym $mod+r mode "resize"
 bar {
         status_command i3status
         position top
+        colors {
+        focused_workspace #333333 #18cb00 #000000
+        }
 }
-
+client.focused #18cb00 #18cb00 #000000 #2e9ef4 #18cb00
 
 for_window [class="^.*"] border pixel 1
 gaps outer 0
-gaps inner 10
+gaps inner 5
 
 
 smart_borders on
@@ -200,5 +203,5 @@ smart_gaps on
 # Things to execute at startups
 exec --no-startup-id nm-applet # NetworkManager tray GUI.
 exec --no-startup-id blueman-applet # Bluetooth tray GUI
-exec --no-startup-id compton # Compositor
+exec --no-startup-id picom # Compositor
 exec --no-startup-id feh --bg-scale ~/Pictures/wallpaper.jpg # Wallpaper
