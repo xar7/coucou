@@ -17,6 +17,7 @@ order += "ethernet _first_"
 order += "battery all"
 order += "disk /home/"
 order += "disk /"
+order += "cpu_temperature 0"
 order += "load"
 order += "memory"
 order += "tztime local"
@@ -43,12 +44,17 @@ disk "/" {
         format = "/: %avail"
 }
 
+cpu_temperature 0 {
+                format = "CPU: %degrees °C"
+                max_threshold = "65"
+}
+
 load {
         format = "%1min"
 }
 
 memory {
-        format = "%used | %available"
+        format = "USED: %used | FREE: %available"
         threshold_degraded = "1G"
         format_degraded = "MEMORY < %available"
 }

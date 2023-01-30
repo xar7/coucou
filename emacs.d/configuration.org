@@ -132,7 +132,10 @@
      (use-package protobuf-mode)
      (use-package tree-sitter)
      (use-package tree-sitter-langs)
-     (use-package py-autopep8)
+     (use-package python-black
+       :demand t
+       :after python
+       :hook (python-mode . python-black-on-save-mode-enable-dwim))
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -211,6 +214,11 @@
      (require 'py-autopep8)
      (add-hook 'python-mode-hook 'py-autopep8-mode)
      (setq py-autopep8-options '("--max-line-length=100" "--aggressive"))
+   #+END_SRC
+** Csharp things
+   Because omnisharp seems to look for the server at the store path
+   #+BEGIN_SRC emacs-lisp
+   (setq lsp-csharp-omnisharp-roslyn-store-path "/home/xar/Repos/coucou/emacs.d/.cache/lsp/omnisharp-roslyn/latest/omnisharp-roslyn/OmniSharp")
    #+END_SRC
 ** Tree-sitter
    Tree-sitter because I ran into font-lock-mode infinite loop when opening a docstring in python
