@@ -132,10 +132,12 @@
      (use-package protobuf-mode)
      (use-package tree-sitter)
      (use-package tree-sitter-langs)
+     (use-package py-autopep8)
      (use-package python-black
        :demand t
        :after python
        :hook (python-mode . python-black-on-save-mode-enable-dwim))
+     (use-package yaml-mode)
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -229,7 +231,7 @@
 * Keybindings
 ** Helm
    #+BEGIN_SRC emacs-lisp
-   (require 'helm-config)
+   (require 'helm)
    (define-key helm-map (kbd "TAB") 'helm-execute-persistent-action)
    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
    (define-key helm-map (kbd "C-z") 'helm-select-action)
