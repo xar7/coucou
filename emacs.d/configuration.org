@@ -23,7 +23,6 @@
   #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
   (menu-bar-mode -1)
-  (global-linum-mode)
   (column-number-mode)
   (setq-default indent-tabs-mode nil)
   (setq indent-tabs-mode nil)
@@ -114,16 +113,15 @@
      ;;   (use-package emojify)
      (use-package clang-format)
      (use-package flycheck)
-     (use-package csharp-mode)
+     ;;(use-package csharp-mode)
      (use-package visual-regexp)
      (use-package lsp-mode
        :init
        ;; set the prefix for lsp-command-keymap
        (setq lsp-keymap-prefix "C-c l")
        (setq lsp-clients-clangd-executable (executable-find "clangd"))
-       (setq lsp-pyls-server-command "/home/xar/.local/bin/pylsp")
-       :hook (c++-mode . lsp)
-       :hook (csharp-mode . lsp)
+       (setq lsp-rust-server 'rust-analyzer)
+       :hook (c++-mode . lsp) (c-mode . lsp)
        :commands (lsp lsp-deferred))
      (use-package lsp-ui :commands lsp-ui-mode)
      (use-package helm-lsp :commands helm-lsp-workspace-symbol)
@@ -138,6 +136,10 @@
        :after python
        :hook (python-mode . python-black-on-save-mode-enable-dwim))
      (use-package yaml-mode)
+     (use-package rustic
+       :ensure t
+       :config
+       (setq rust-format-on-save t))
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -172,6 +174,34 @@
      "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
    (setq org-src-fontify-natively t)
    #+END_SRC
+** Org-roam
+Thanks system-crafters for the basic configuration.
+#+BEGIN_SRC emacs-lisp
+  (use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/Notes/roam")
+  (org-roam-daily-directory "~/Notes/roam/dailies")
+  (org-roam-completion-everywhere t)
+  (org-roam-dailies-capture-templates
+    '(("d" "default" entry "* %<%I:%M %p>: %?"
+       :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point)
+         :map org-roam-dailies-map
+         ("Y" . org-roam-dailies-capture-yesterday)
+         ("T" . org-roam-dailies-capture-tomorrow))
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)
+  :config
+  (require 'org-roam-dailies) ;; Ensure the keymap is available
+  (org-roam-db-autosync-mode))
+#+END_SRC
 ** Projectile
    #+BEGIN_SRC emacs-lisp
    (require 'projectile)
@@ -204,12 +234,6 @@
      (function (lambda ()
      (add-hook 'before-save-hook 'clang-format-buffer-smart))))
    #+END_SRC
-** Csharp things
-   Line ending
-   #+BEGIN_SRC emacs-lisp
-     (require 'csharp-mode)
-     (add-hook 'csharp-mode (setq buffer-file-coding-system 'dos))
-   #+END_SRC
 ** Python things
    Autopep8 on save (similar to auto clang-format)
    #+BEGIN_SRC emacs-lisp
@@ -217,16 +241,15 @@
      (add-hook 'python-mode-hook 'py-autopep8-mode)
      (setq py-autopep8-options '("--max-line-length=100" "--aggressive"))
    #+END_SRC
-** Csharp things
-   Because omnisharp seems to look for the server at the store path
-   #+BEGIN_SRC emacs-lisp
-   (setq lsp-csharp-omnisharp-roslyn-store-path "/home/xar/Repos/coucou/emacs.d/.cache/lsp/omnisharp-roslyn/latest/omnisharp-roslyn/OmniSharp")
-   #+END_SRC
 ** Tree-sitter
    Tree-sitter because I ran into font-lock-mode infinite loop when opening a docstring in python
    #+BEGIN_SRC emacs-lisp
      (global-tree-sitter-mode)
      (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+   #+END_SRC
+** TRAMP
+   #+BEGIN_SRC emacs-lisp
+     (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
    #+END_SRC
 * Keybindings
 ** Helm
@@ -248,9 +271,20 @@
    (global-set-key (kbd "M-s M-s") 'whitespace-mode)
    (global-set-key (kbd "C-c p") 'company-complete)
    #+END_SRC
+* macOS specific
+#+BEGIN_SRC emacs-lisp
+    (if (eq system-type 'darwin)
+        (progn
+          (message "Running on macOS: I hope you have a good reason to.")
+          (setq mac-right-option-modifier nil)
+          (keymap-global-set "M-m" 'set-mark-command) ; just because I didn't figure out how to unmap C-SPC on macos
+          (add-to-list 'exec-path "/Library/TeX/texbin")
+          (add-to-list 'exec-path "/Users/mnativel/Library/Python/3.9/bin")
+          (add-to-list 'exec-path "/Users/mnativel/.cargo/bin")))
+#+END_SRC
 * Theme
   #+BEGIN_SRC emacs-lisp
   (load-theme 'doom-one t)
   (add-to-list 'default-frame-alist
-               '(font . "Fira Code Medium-11"))
+               '(font . "Fira Code Medium-16"))
   #+END_SRC
