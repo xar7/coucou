@@ -9,7 +9,7 @@ backup:
 
 .PHONY: emacs
 emacs:
-	ln -sf $(PWD)/emacs.d $(HOME)/.emacs.d
+	ln -sT $(PWD)/emacs.d $(HOME)/.emacs.d
 
 .PHONY: emacsAsDaemon
 emacsAsDaemon:

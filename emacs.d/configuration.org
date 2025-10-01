@@ -23,7 +23,7 @@
   #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
   (menu-bar-mode -1)
-  (global-linum-mode)
+  (global-display-line-numbers-mode 1)
   (column-number-mode)
   (setq-default indent-tabs-mode nil)
   (setq indent-tabs-mode nil)
@@ -124,6 +124,7 @@
        (setq lsp-pyls-server-command "/home/xar/.local/bin/pylsp")
        :hook (c++-mode . lsp)
        :hook (csharp-mode . lsp)
+       :hook (rust-mode . lsp)
        :commands (lsp lsp-deferred))
      (use-package lsp-ui :commands lsp-ui-mode)
      (use-package helm-lsp :commands helm-lsp-workspace-symbol)
@@ -138,6 +139,11 @@
        :after python
        :hook (python-mode . python-black-on-save-mode-enable-dwim))
      (use-package yaml-mode)
+     (use-package rust-mode
+       :defer t
+       :mode "\\.rs\\'"
+       :hook (rust-mode . (lambda () (setq index-tabs-mode nil)))
+       :config (setq rust-format-on-save t))
    #+END_SRC
 * Specific package configuration
 ** Org-mode
@@ -147,6 +153,7 @@
    (define-key org-mode-map (kbd "C-c a") 'org-agenda)
    (define-key org-mode-map (kbd "C-c l") 'org-store-link)
    (setq org-log-done t)  ;; log data/time when todo is set to done
+   (require 'org-tempo)
    #+END_SRC
    Org mode hook with org bullets:
    #+BEGIN_SRC emacs-lisp
@@ -163,14 +170,26 @@
    #+END_SRC
    Highlight code when converting to pdf with latex:
    #+BEGIN_SRC emacs-lisp
-   (require 'ox-latex)
-   (add-to-list 'org-latex-packages-alist '("" "minted"))
-   (setq org-latex-listings 'minted)
-   (setq org-latex-pdf-process
-   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-   (setq org-src-fontify-natively t)
+     (require 'ox-latex)
+     (add-to-list 'org-latex-packages-alist '("" "minted"))
+     (setq org-latex-listings 'minted)
+     (setq org-latex-pdf-process
+     '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+       "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+       "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+     (setq org-src-fontify-natively t)
+   #+END_SRC
+   Org-roam
+   #+BEGIN_SRC emacs-lisp
+   (use-package org-roam
+  :custom
+   (org-roam-directory "/home/xar/Notes/org-roam")
+   (org-roam-completion-everywhere t)
+   :bind (("C-c n l" . org-roam-buffer-toggle)
+          ("C-c n f" . org-roam-node-find)
+          ("C-c n i" . org-roam-node-insert))
+   :config
+   (org-roam-setup))
    #+END_SRC
 ** Projectile
    #+BEGIN_SRC emacs-lisp
