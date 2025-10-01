@@ -6,6 +6,7 @@ Type=forking
 ExecStart=/usr/bin/emacs --daemon
 ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
 Environment=SSH_AUTH_SOCK=%t/keyring/ssh
+Environment=PATH=/usr/local/bin:/usr/bin:/bin:/home/you/.cargo/bin:/usr/lib/rustup/bin
 Restart=on-failure
 
 [Install]
